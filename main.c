@@ -6,6 +6,8 @@
 #include "generations.h"
 #include "fileread.h"
 #include "filewrite.h"
+#include "filegen.h"
+#include "pngfile.h"
 
 int main( int argc, char* argv[] ) {                     //plik do czytania, liczba generacji, plik do wpisywania
 	
@@ -14,11 +16,14 @@ int main( int argc, char* argv[] ) {                     //plik do czytania, lic
 	char * out = (argc > 3) ? argv[3] : "writetest.txt";
 
 struct Cells newcells = cellsread (in);                  //czytanie z pliku (fileread.c)
-while (gen--) {
+char *filename;                                          //plik png
+
+for (int i = 0; i < gen; i++) {
 	newcells = generation (newcells);                    //nowe generacji (generations.c)
-	//<pngcreate>
+	filename = pngname (i);                              //generacja png plikow (filegen.c)
+	process_file (newcells, filename);                   //zapisywanie do png plikow (pngfile.c) 
 }
-cellswrite (newcells, out);                              //wpisywanie do pliku (filewrite.c)
+cellswrite (newcells, out);                              //wpisywanie do pliku txt (filewrite.c)
 
 return 0;
 
